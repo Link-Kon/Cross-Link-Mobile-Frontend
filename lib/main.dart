@@ -1,3 +1,5 @@
+import 'package:cross_link/src/config/router/app_router.dart';
+import 'package:cross_link/src/config/router/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,11 +13,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Cross Link App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: Routes.HOME,
+      routes: appRoutes(),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
