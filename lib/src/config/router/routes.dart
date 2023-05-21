@@ -10,6 +10,8 @@ abstract class Routes {
   // ignore: constant_identifier_names
   static const PROFILE = '/profile';
   // ignore: constant_identifier_names
+  static const UPDATE_PROFILE = '/update_profile';
+  // ignore: constant_identifier_names
   static const SETTINGS = '/settings';
   // ignore: constant_identifier_names
   static const SUMMARY = '/summary';

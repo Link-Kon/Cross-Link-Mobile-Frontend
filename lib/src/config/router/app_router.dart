@@ -7,6 +7,7 @@ import 'package:cross_link/src/presentation/pages/profile_page.dart';
 import 'package:cross_link/src/presentation/pages/settings_page.dart';
 import 'package:cross_link/src/presentation/pages/summary_page.dart';
 import 'package:cross_link/src/presentation/pages/sign_up_page.dart';
+import 'package:cross_link/src/presentation/pages/update_profile_screen.dart';
 import 'package:flutter/widgets.dart';
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
@@ -16,6 +17,7 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     Routes.DEVICE_SETTINGS: (_) => const DeviceSettingsPage(),
     Routes.HEALTHCARE_SURVEY: (_) => HealthcareSurveyPage(),
     Routes.PROFILE: (_) => const ProfilePage(),
+    Routes.UPDATE_PROFILE: (_) => const UpdateProfilePage(),
     Routes.SETTINGS: (_) => const SettingsPage(),
     Routes.SUMMARY: (_) => const SummaryPage(),
     Routes.USER_REGISTRATION: (_) => SignUpPage(),

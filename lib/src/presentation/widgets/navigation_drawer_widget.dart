@@ -1,5 +1,6 @@
 import 'package:cross_link/src/config/router/routes.dart';
 import 'package:cross_link/src/presentation/widgets/sign_up_widget.dart';
+import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -15,8 +16,8 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: ListView(
           padding: padding,
           children: <Widget>[
-            const DrawerHeader(
-              child: Icon(Icons.watch_rounded, size: 60,),
+            DrawerHeader(
+              child: Image.asset(logoImage),
             ),
             buildMenuItem(
               text: 'Profile',
@@ -90,13 +91,13 @@ class NavigationDrawerWidget extends StatelessWidget {
         Navigator.pushNamed(context, Routes.DEVICE_LINKS);
         break;
       case 4:
-        Navigator.pushNamed(context, Routes.HOME); //TODO: create a Product Help page
+        debugPrint('product help'); //TODO: create a Product Help page
         break;
       case 5:
-        Navigator.pushNamed(context, Routes.HOME); //TODO: create a Privacy Policy
+        debugPrint('privacy policy'); //TODO: create a Privacy Policy
         break;
       case 6:
-        Navigator.pushReplacementNamed(context, Routes.HOME); //TODO: make log out method
+        debugPrint('log out'); //TODO: make log out method
         break;
     }
   }
