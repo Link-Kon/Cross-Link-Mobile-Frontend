@@ -36,7 +36,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               onClicked: () => selectedItem(context, 2),
             ),
             buildMenuItem(
-              text: 'Links',
+              text: 'User Links',
               icon: Icons.people,
               onClicked: () => selectedItem(context, 3),
             ),
@@ -88,7 +88,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         Navigator.pushNamed(context, Routes.SUMMARY);
         break;
       case 3:
-        Navigator.pushNamed(context, Routes.DEVICE_LINKS);
+        Navigator.pushNamed(context, Routes.USER_LINKS);
         break;
       case 4:
         debugPrint('product help'); //TODO: create a Product Help page

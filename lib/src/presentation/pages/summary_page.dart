@@ -12,7 +12,7 @@ class _SummaryPageState extends State<SummaryPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cross Link"),
+        title: const Text("Healthcare Summary"),
       ),
       body: Container(
         alignment: Alignment.center,

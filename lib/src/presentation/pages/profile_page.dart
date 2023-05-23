@@ -60,9 +60,13 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 10,),
 
             //Menu
-            ProfileMenuWidget(title: 'Settings', icon: Icons.settings, onPress: () {},),
+            ProfileMenuWidget(title: 'Settings', icon: Icons.settings,
+              onPress: () {},
+            ),
             ProfileMenuWidget(title: 'Healthcare Survey', icon: Icons.sticky_note_2_rounded, onPress: () {},),
-            ProfileMenuWidget(title: 'Check your links', icon: Icons.people_alt_rounded, onPress: () {},),
+            ProfileMenuWidget(title: 'Check your links', icon: Icons.people_alt_rounded,
+              onPress: () {Navigator.pushNamed(context, Routes.USER_LINKS);},
+            ),
             const Divider(),
             const SizedBox(height: 10,),
             ProfileMenuWidget(

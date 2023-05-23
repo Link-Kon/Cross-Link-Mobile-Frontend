@@ -48,7 +48,7 @@ class SignUpWidget extends StatelessWidget {
             const SizedBox(height: 30,),
             TextButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, Routes.USER_REGISTRATION);
+                Navigator.pushReplacementNamed(context, Routes.SIGN_UP);
                 },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
