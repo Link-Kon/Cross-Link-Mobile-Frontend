@@ -1,3 +1,4 @@
+import 'package:cross_link/src/presentation/widgets/add_user_widget.dart';
 import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,9 @@ class _UserLinksPageState extends State<UserLinksPage>{
         title: const Text("User Links"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () { debugPrint('add user link'); }, //TODO: add dialogue to add account
+        onPressed: () {
+          showDialog(context: context, builder: (BuildContext context) => AddUserWidget());
+        },
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),

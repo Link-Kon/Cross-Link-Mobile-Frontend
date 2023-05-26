@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class SignInWidget extends StatelessWidget {
   SignInWidget({super.key});
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SignInWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height/2.5,
+        height: 340,
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 20,),
@@ -35,7 +35,6 @@ class SignInWidget extends StatelessWidget {
                 fontSize: 18,
               ),
               decoration: const InputDecoration(
-                //labelStyle: TextStyle(color: Colors.red, fontSize: 16.0),
                 hintText: 'Username',
                 hintStyle: TextStyle(
                     color: Colors.grey, fontSize: 14),

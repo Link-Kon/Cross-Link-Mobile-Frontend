@@ -14,7 +14,7 @@ class SignUpWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height/2.5,
+        height: 310,
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 20,),
@@ -81,7 +81,6 @@ class SignUpWidget extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20,),
           ],
         ),
       ),
