@@ -1,3 +1,4 @@
+import 'package:cross_link/src/domain/models/responses/devices_response.dart';
 import 'package:cross_link/src/domain/models/responses/user_links_response.dart';
 import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:dio/dio.dart';
@@ -10,7 +11,7 @@ abstract class DeviceApiService {
   factory DeviceApiService(Dio dio, {String baseUrl}) = _DeviceApiService;
 
   @GET('/')
-  Future<HttpResponse<UserLinksResponse>> getDevices({
+  Future<HttpResponse<DevicesResponse>> getDevices({
     @Query("apiKey") String? apiKey,
     @Query("userDataId") String? userDataId,
   });

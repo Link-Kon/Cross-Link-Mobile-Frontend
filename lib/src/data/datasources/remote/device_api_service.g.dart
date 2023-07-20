@@ -21,7 +21,7 @@ class _DeviceApiService implements DeviceApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<UserLinksResponse>> getDevices({
+  Future<HttpResponse<DevicesResponse>> getDevices({
     String? apiKey,
     String? userDataId,
   }) async {
@@ -34,7 +34,7 @@ class _DeviceApiService implements DeviceApiService {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<UserLinksResponse>>(Options(
+        _setStreamType<HttpResponse<DevicesResponse>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -46,7 +46,7 @@ class _DeviceApiService implements DeviceApiService {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = UserLinksResponse.fromMap(_result.data!);
+    final value = DevicesResponse.fromMap(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
