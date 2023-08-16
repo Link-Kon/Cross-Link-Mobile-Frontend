@@ -1,9 +1,13 @@
 class UserLinksRequest {
   final String apiKey;
-  final String userCode;
+  final String user1Code;
+  final String user2Code;
+  final bool state;
 
   UserLinksRequest({
-    this.apiKey = 'token', //TODO: make dynamic
-    this.userCode = '1', //TODO: make dynamic
+    this.apiKey = '',
+    this.user1Code = '',
+    this.user2Code = '',
+    this.state = true,
   });
 }

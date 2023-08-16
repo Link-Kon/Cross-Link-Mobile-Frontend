@@ -6,4 +6,4 @@ const logoImage = 'assets/LinkLogo.jpg';
 const defaultProfileImage = 'assets/LinkLogo.jpg';
 
 // Networking and APIs
-const String baseUrlRelationshipApi = 'https://newsapi.org/v2';
+const String baseUrlWebService = 'https://10.0.2.2:7121/api'; //TODO: change

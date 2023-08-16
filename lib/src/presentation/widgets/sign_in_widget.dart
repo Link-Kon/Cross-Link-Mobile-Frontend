@@ -1,3 +1,6 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:cross_link/src/data/datasources/remote/user_api_service.dart';
 import 'package:cross_link/src/presentation/widgets/sign_up_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +58,26 @@ class SignInWidget extends StatelessWidget {
             ),
             const SizedBox(height: 30,),
             TextButton(
-              onPressed: () {print("sign up");},
+              onPressed: () async {
+                print("sign in");
+                await signInUser('user1', 'Pa12345678#');
+                print('currente user');
+                AuthUser user = await getCurrentUser();
+                print('currente userID: ${user.userId}');
+                print('currente username: ${user.username}');
+                print('currente user: ${user.signInDetails}');
+
+                await printAccessToken();
+                /*Auth.currentSession().then(res=>{
+                let accessToken = res.getAccessToken()
+                let jwt = accessToken.getJwtToken()
+
+                //You can print them to see the full objects
+                console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
+                console.log(`myJwt: ${jwt}`)
+                })*/
+                //await signOutCurrentUser();
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.blue),
               ),
@@ -91,6 +113,92 @@ class SignInWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> signOutCurrentUser() async {
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      safePrint('Sign out completed successfully');
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
+    }
+  }
+
+  Future<void> printAccessToken() async {
+    try {
+      final cognitoPlugin = Amplify.Auth.getPlugin(AmplifyAuthCognito.pluginKey);
+      final result = await cognitoPlugin.fetchAuthSession();
+      final accessToken = result.userPoolTokensResult.value;
+      safePrint("Access token: ${accessToken.accessToken}");
+    } on AuthException catch (e) {
+      safePrint('Error retrieving access token: ${e.message}');
+    }
+  }
+
+  Future<void> fetchAuthSession() async {
+    try {
+      final result = await Amplify.Auth.fetchAuthSession();
+      safePrint('User is signed in: ${result.isSignedIn}');
+    } on AuthException catch (e) {
+      safePrint('Error retrieving auth session: ${e.message}');
+    }
+  }
+
+  Future<AuthUser> getCurrentUser() async {
+    final user = await Amplify.Auth.getCurrentUser();
+    return user;
+  }
+
+  Future<void> signInUser(String username, String password) async {
+    try {
+      final result = await Amplify.Auth.signIn(
+        username: username,
+        password: password,
+      );
+      await _handleSignInResult(result);
+    } on AuthException catch (e) {
+      safePrint('Error signing in: ${e.message}');
+    }
+  }
+
+  Future<void> _handleSignInResult(SignInResult result) async {
+    switch (result.nextStep.signInStep) {
+      case AuthSignInStep.confirmSignInWithSmsMfaCode:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        _handleCodeDelivery(codeDeliveryDetails);
+        break;
+      case AuthSignInStep.confirmSignInWithNewPassword:
+        safePrint('Enter a new password to continue signing in');
+        break;
+      case AuthSignInStep.confirmSignInWithCustomChallenge:
+        final parameters = result.nextStep.additionalInfo;
+        final prompt = parameters['prompt']!;
+        safePrint(prompt);
+        break;
+      /*case AuthSignInStep.resetPassword:
+        final resetResult = await Amplify.Auth.resetPassword(
+          username: username,
+        );
+        await _handleResetPasswordResult(resetResult);
+        break;*/
+      /*case AuthSignInStep.confirmSignUp:
+      // Resend the sign up code to the registered device.
+        final resendResult = await Amplify.Auth.resendSignUpCode(
+          username: username,
+        );
+        _handleCodeDelivery(resendResult.codeDeliveryDetails);
+        break;*/
+      case AuthSignInStep.done:
+        safePrint('Sign in is complete');
+        break;
+    }
+  }
+
+  void _handleCodeDelivery(AuthCodeDeliveryDetails codeDeliveryDetails) {
+    safePrint(
+      'A confirmation code has been sent to ${codeDeliveryDetails.destination}. '
+          'Please check your ${codeDeliveryDetails.deliveryMedium.name} for the code.',
     );
   }
 

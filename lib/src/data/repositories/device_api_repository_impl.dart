@@ -1,9 +1,9 @@
-import 'package:cross_link/src/data/datasources/remote/device_api_service.dart';
-import 'package:cross_link/src/data/repositories/base_api_repository.dart';
-import 'package:cross_link/src/domain/models/requests/devices_request.dart';
-import 'package:cross_link/src/domain/models/responses/devices_response.dart';
-import 'package:cross_link/src/domain/repositories/device_api_repository.dart';
-import 'package:cross_link/src/utils/resources/data_state.dart';
+import '../../domain/models/device.dart';
+import '../../domain/models/requests/devices_request.dart';
+import '../../domain/repositories/device_api_repository.dart';
+import '../../utils/resources/data_state.dart';
+import '../datasources/remote/device_api_service.dart';
+import 'base/base_api_repository.dart';
 
 class DeviceApiRepositoryImpl extends BaseApiRepository implements DeviceApiRepository {
   final DeviceApiService _deviceApiService;
@@ -11,8 +11,8 @@ class DeviceApiRepositoryImpl extends BaseApiRepository implements DeviceApiRepo
   DeviceApiRepositoryImpl(this._deviceApiService);
 
   @override
-  Future<DataState<DevicesResponse>> getDevices({required DevicesRequest request}) {
-    return getStateOf<DevicesResponse>(
+  Future<DataState<List<Device>>> getDevices({required DevicesRequest request}) {
+    return getStateOf<List<Device>>(
       request: () => _deviceApiService.getDevices(
         apiKey: request.apiKey,
         userDataId: request.userDataId,

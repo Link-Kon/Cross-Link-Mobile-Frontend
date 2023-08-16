@@ -1,7 +1,13 @@
+import 'package:cross_link/src/presentation/cubits/user_links/user_links_cubit.dart';
+import 'package:cross_link/src/presentation/cubits/user_links/user_links_state.dart';
 import 'package:cross_link/src/presentation/widgets/add_user_widget.dart';
 import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:cross_link/src/utils/constants/strings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/models/user_link.dart';
 
 class UserLinksPage extends StatefulWidget {
   const UserLinksPage({super.key});
@@ -11,19 +17,17 @@ class UserLinksPage extends StatefulWidget {
 
 class _UserLinksPageState extends State<UserLinksPage>{
 
-  //TODO: obtain data from server
-  var link1 = ['Panchito 1', '11/22/33', defaultProfileImage];
-  var link2 = ['Panchito 2', '11/22/33', defaultProfileImage];
-  var link3 = ['Panchito 3', '11/22/33', defaultProfileImage];
-
-  var links = [];
-
   @override
   void initState() {
     super.initState();
-    links.add(link1);
-    links.add(link2);
-    links.add(link3);
+    final aCubit = BlocProvider.of<UserLinksCubit>(context);
+    aCubit.getUserLinks(apiKey: '', userCode: 'user1code');
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -40,45 +44,67 @@ class _UserLinksPageState extends State<UserLinksPage>{
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(defaultSize-20),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  userListWidget(context),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: BlocBuilder<UserLinksCubit, UserLinksState>(
+        builder: (_, state) {
+          switch (state.runtimeType) {
+            case UserLinksLoading:
+              return const Center(child: CupertinoActivityIndicator());
+            case UserLinksFailed:
+              debugPrint('error: ${state.error}');
+              return Center(child: IconButton(icon: const Icon(Icons.refresh), onPressed: () {
+                  context.read<UserLinksCubit>().getUserLinks(apiKey: 'aa', userCode: 'user1code');
+                },)
+              );
+            case UserLinksSuccess:
+              return state.userLinks.isNotEmpty? _buildUserLinks(state.userLinks)
+                  : const Center(child: Text('No users added'));
+            default:
+              return const SizedBox();
+          }
+        },
       ),
     );
   }
 
-  Widget userListWidget(BuildContext context) {
+  Widget _buildUserLinks(List<UserLink> links) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(defaultSize-20),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                userListWidget(links),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget userListWidget(List<UserLink> links) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
-        children: buildUserList(),
+        children: buildUserList(links),
       ),
     );
   }
 
-  List<Widget> buildUserList() {
+  List<Widget> buildUserList(List<UserLink> links) {
     List<Widget> rows = [];
     for (var element in links) {
-      rows.add(userInfo(element[0], element[1], element[2]));
+      rows.add(userInfo(element));
     }
     return rows;
   }
 
-  Widget userInfo(String name, String date, String image) {
+  Widget userInfo(UserLink link) {
     return Card(
       child: InkWell(
-        onTap: () {debugPrint('Card: $name');}, //TODO: add connection with user info
+        onTap: () {debugPrint('Card: ${link.user2code}');},
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: SizedBox(
@@ -90,8 +116,8 @@ class _UserLinksPageState extends State<UserLinksPage>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(name,),
-                      Text(date,)
+                      Text('${link.name}: ${link.user2code} NAME',),
+                      Text('state: ${link.state}',)
                     ],
                   ),
                 ),
@@ -101,7 +127,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
                   width: 80,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(image)
+                    child: Image.asset(link.imageUrl ?? defaultProfileImage)
                   ),
                 )
               ],

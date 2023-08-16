@@ -3,6 +3,7 @@ import 'package:cross_link/src/presentation/pages/device_links_page.dart';
 import 'package:cross_link/src/presentation/pages/device_settings_page.dart';
 import 'package:cross_link/src/presentation/pages/healthcare_survey_page.dart';
 import 'package:cross_link/src/presentation/pages/home_page.dart';
+import 'package:cross_link/src/presentation/pages/illnesses_page.dart';
 import 'package:cross_link/src/presentation/pages/profile_page.dart';
 import 'package:cross_link/src/presentation/pages/settings_page.dart';
 import 'package:cross_link/src/presentation/pages/summary_page.dart';
@@ -23,5 +24,6 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     Routes.SETTINGS: (_) => const SettingsPage(),
     Routes.SUMMARY: (_) => const SummaryPage(),
     Routes.SIGN_UP: (_) => SignUpPage(),
+    Routes.ILLNESSES: (_) => const IllnessesPage(),
   };
 }

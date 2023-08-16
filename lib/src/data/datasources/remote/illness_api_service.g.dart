@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'device_api_service.dart';
+part of 'illness_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'device_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _DeviceApiService implements DeviceApiService {
-  _DeviceApiService(
+class _IllnessApiService implements IllnessApiService {
+  _IllnessApiService(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,33 +21,26 @@ class _DeviceApiService implements DeviceApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<List<Device>>> getDevices({
-    String? apiKey,
-    String? userDataId,
-  }) async {
+  Future<HttpResponse<List<Illness>>> getAllIllnesses() async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'apiKey': apiKey,
-      r'userDataId': userDataId,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<HttpResponse<List<Device>>>(Options(
+        _setStreamType<HttpResponse<List<Illness>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/',
+              '/Illness',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => Device.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) => Illness.fromJson(i as Map<String, dynamic>))
         .toList();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;

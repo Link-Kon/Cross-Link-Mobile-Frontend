@@ -10,6 +10,8 @@ abstract class Routes {
   // ignore: constant_identifier_names
   static const HEALTHCARE_SURVEY = '/healthcare_survey';
   // ignore: constant_identifier_names
+  static const ILLNESSES = '/illnesses';
+  // ignore: constant_identifier_names
   static const PROFILE = '/profile';
   // ignore: constant_identifier_names
   static const UPDATE_PROFILE = '/update_profile';

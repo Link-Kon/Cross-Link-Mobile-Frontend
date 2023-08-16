@@ -1,3 +1,5 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cross_link/src/config/router/routes.dart';
 import 'package:cross_link/src/presentation/widgets/sign_in_widget.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +69,9 @@ class SignUpWidget extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
+                      print('sign up before');
+                      await signUpUser(username: 'user1', password: 'Pa12345678#', email: 'patrickortizlaura@gmail.com');
                       Navigator.pop(context);
                       showDialog(context: context, builder: (BuildContext context) => SignInWidget());
                     },
@@ -84,6 +88,50 @@ class SignUpWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> signUpUser({
+    required String username,
+    required String password,
+    required String email,
+    String? phoneNumber,
+  }) async {
+    try {
+      final userAttributes = {
+        AuthUserAttributeKey.email: email,
+        if (phoneNumber != null) AuthUserAttributeKey.phoneNumber: phoneNumber,
+        // additional attributes as needed
+      };
+      final result = await Amplify.Auth.signUp(
+        username: username,
+        password: password,
+        options: SignUpOptions(
+          userAttributes: userAttributes,
+        ),
+      );
+      await _handleSignUpResult(result);
+    } on AuthException catch (e) {
+      safePrint('Error signing up user: ${e.message}');
+    }
+  }
+
+  Future<void> _handleSignUpResult(SignUpResult result) async {
+    switch (result.nextStep.signUpStep) {
+      case AuthSignUpStep.confirmSignUp:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        _handleCodeDelivery(codeDeliveryDetails);
+        break;
+      case AuthSignUpStep.done:
+        safePrint('Sign up is complete');
+        break;
+    }
+  }
+
+  void _handleCodeDelivery(AuthCodeDeliveryDetails codeDeliveryDetails) {
+    safePrint(
+      'A confirmation code has been sent to ${codeDeliveryDetails.destination}. '
+          'Please check your ${codeDeliveryDetails.deliveryMedium.name} for the code.',
     );
   }
 
