@@ -1,6 +1,10 @@
-import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../config/themes/app_colors.dart';
+import '../../utils/common_widgets/border_widget.dart';
+import '../../utils/common_widgets/section_bold_text_widget.dart';
+import '../../utils/common_widgets/section_text_widget.dart';
 
 class SummaryPage extends StatefulWidget {
   const SummaryPage({super.key});
@@ -9,7 +13,6 @@ class SummaryPage extends StatefulWidget {
 }
 
 class _SummaryPageState extends State<SummaryPage>{
-
   int selected = 0;
 
   List<_ChartData>? chartData;
@@ -17,7 +20,6 @@ class _SummaryPageState extends State<SummaryPage>{
 
   @override
   void initState() {
-    super.initState();
     chartData = <_ChartData>[
       _ChartData(2005, 21, 28),
       _ChartData(2006, 24, 44),
@@ -31,8 +33,13 @@ class _SummaryPageState extends State<SummaryPage>{
     problemList.add('Problem 1');
     problemList.add('Problem 2');
     problemList.add('Problem 3');
+    /*problemList.add('Problem 4');
+    problemList.add('Problem 5');
+    problemList.add('Problem 6');*/
 
     selected = 0;
+
+    super.initState();
   }
 
   @override
@@ -46,19 +53,49 @@ class _SummaryPageState extends State<SummaryPage>{
     return Scaffold(
       appBar: AppBar(
         title: const Text("Healthcare Summary"),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Palette.black,
+        elevation: 0,
       ),
       body: SingleChildScrollView (
-        padding: const EdgeInsets.all(defaultSize),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text("Here you can see a detailed summary of your health and some recommendations"),
-            const SizedBox(height: 20,),
+            Container(
+              padding: const EdgeInsets.only(left: 30, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  //SectionTitleTextWidget(text: 'Summary'),
+                  SizedBox(height: 5),
+                  SectionTextWidget(text: 'Health summary and some recommendations'),
+                  SizedBox(height: 20),
+                ],
+              ),
+            ),
             tabBar(),
-            const SizedBox(height: 20,),
-            _buildDefaultLineChart(selected),
-            const SizedBox(height: 40,),
-            _buildDefaultLineChart(0),
-            const Text('End graphic'),
+            Container(
+              padding: const EdgeInsets.only(left: 30, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 20),
+
+                  const SectionBoldTextWidget(text: 'Subtitle 1'),
+                  const SizedBox(height: 5),
+                  BorderWidget(child: _buildDefaultLineChart(selected)),
+
+                  const SizedBox(height: 30),
+
+                  const SectionBoldTextWidget(text: 'Subtitle 2'),
+                  const SizedBox(height: 5),
+                  BorderWidget(child: _buildDefaultLineChart(0)),
+
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -67,19 +104,23 @@ class _SummaryPageState extends State<SummaryPage>{
 
   SfCartesianChart _buildDefaultLineChart(int index) {
     return SfCartesianChart(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       plotAreaBorderWidth: 0,
-      title: ChartTitle(text: 'Inflation - Consumer price'),
+      //title: ChartTitle(text: 'Inflation - Consumer price', alignment: ChartAlignment.near),
       legend: Legend(
-          isVisible: true,
-          overflowMode: LegendItemOverflowMode.wrap),
+        isVisible: false,
+        overflowMode: LegendItemOverflowMode.wrap
+      ),
       primaryXAxis: NumericAxis(
-          edgeLabelPlacement: EdgeLabelPlacement.shift,
-          interval: 2,
-          majorGridLines: const MajorGridLines(width: 0)),
+        edgeLabelPlacement: EdgeLabelPlacement.shift,
+        interval: 2,
+        majorGridLines: const MajorGridLines(width: 0)
+      ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value}%',
-          axisLine: const AxisLine(width: 0),
-          majorTickLines: const MajorTickLines(color: Colors.transparent)),
+        labelFormat: '{value}%',
+        axisLine: const AxisLine(width: 0),
+        majorTickLines: const MajorTickLines(color: Colors.transparent)
+      ),
       series: _getSeries(index),
       tooltipBehavior: TooltipBehavior(enable: true),
     );
@@ -151,12 +192,14 @@ class _SummaryPageState extends State<SummaryPage>{
   Container tabBar() {
     return Container(
       height: 30,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(color: Colors.black,)
+              bottom: BorderSide(color: Colors.grey.shade200,)
           )
       ),
       child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+        physics: const AlwaysScrollableScrollPhysics(),// NeverScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: problemList.length,
         itemBuilder: (context, index) => GestureDetector(
@@ -170,17 +213,19 @@ class _SummaryPageState extends State<SummaryPage>{
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
                 border: Border(
-                    bottom: BorderSide(color: selected==index? Colors.black : Colors.transparent,)
+                  bottom: BorderSide(color: selected==index? Palette.primaryColor : Colors.transparent,)
                 )
             ),
             child: Text(problemList[index],
-              style: const TextStyle(fontSize: 20),
+              style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w500,
+                color: selected == index? Palette.textSelected : Colors.grey,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),
-        separatorBuilder: (context, index) {
-          return const Padding(padding: EdgeInsets.symmetric(horizontal: 10));
-        },
+        separatorBuilder: (context, index) => SizedBox(width: problemList.length<4? 40 : 20),
       ),
     );
   }

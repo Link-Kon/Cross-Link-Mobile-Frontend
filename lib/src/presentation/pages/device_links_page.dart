@@ -2,6 +2,10 @@ import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/themes/app_colors.dart';
+import '../../utils/common_widgets/section_bold_text_widget.dart';
+import '../../utils/common_widgets/section_text_widget.dart';
+
 class DeviceLinksPage extends StatefulWidget {
   const DeviceLinksPage({super.key});
   @override
@@ -30,6 +34,10 @@ class _DeviceLinksPageState extends State<DeviceLinksPage>{
     return Scaffold(
       appBar: AppBar(
         title: const Text("Device Links"),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Palette.black,
+        elevation: 0,
       ),
       body: Container(
         alignment: Alignment.center,
@@ -39,7 +47,7 @@ class _DeviceLinksPageState extends State<DeviceLinksPage>{
             Expanded(
               child: ListView(
                 children: <Widget>[
-                  userListWidget(context),
+                  deviceListWidget(context),
                 ],
               ),
             ),
@@ -49,31 +57,37 @@ class _DeviceLinksPageState extends State<DeviceLinksPage>{
     );
   }
 
-  Widget userListWidget(BuildContext context) {
+  Widget deviceListWidget(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
-        children: buildUserList(),
+        children: buildDeviceList(),
       ),
     );
   }
 
-  List<Widget> buildUserList() {
-    List<Widget> rows = [];
+  List<Widget> buildDeviceList() {
+    List<Widget> list = [];
     for (var element in links) {
-      rows.add(userInfo(element[0], element[1], element[2], element[3]));
+      list.add(deviceInfo(element[0], element[1], element[2], element[3]));
+      list.add(const SizedBox(height: 5));
     }
-    return rows;
+    return list;
   }
 
-  Widget userInfo(String name, String date, String state, String image) {
+  Widget deviceInfo(String name, String date, String state, String image) {
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          side: BorderSide(color: Colors.grey.shade300)
+      ),
       child: InkWell(
-        onTap: () {debugPrint('Card: $name');}, //TODO: add connection with user info
+        borderRadius: BorderRadius.circular(6.0),
+        onTap: () {debugPrint('Card: $name');}, //TODO: add connection with device info
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(20.0),
           child: SizedBox(
-            height: 80,
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -81,13 +95,23 @@ class _DeviceLinksPageState extends State<DeviceLinksPage>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(name,),
-                      state=='1'? const Text('Current', style: TextStyle(color: Colors.grey),) : const SizedBox(),
-                      Text(date,)
+                      SectionBoldTextWidget(text: name),
+                      const SizedBox(height: 10),
+                      state=='1'? const SectionTextWidget(text: 'Current - Some description') : const SizedBox(),
+                      SizedBox(height: state=='1'? 10 : 0),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Last connection: ',
+                          style: const TextStyle(color: Color.fromRGBO(143,143,143,1), fontSize: 14.0, fontWeight: FontWeight.w600),
+                          children: <TextSpan>[
+                            TextSpan(text: date, style: const TextStyle(fontWeight: FontWeight.normal)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 20,),
+                /*const SizedBox(width: 20,),
                 SizedBox(
                   height: 80,
                   width: 80,
@@ -95,7 +119,7 @@ class _DeviceLinksPageState extends State<DeviceLinksPage>{
                       borderRadius: BorderRadius.circular(100),
                       child: Image.asset(image)
                   ),
-                )
+                )*/
               ],
             ),
           ),

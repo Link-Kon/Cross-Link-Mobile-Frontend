@@ -12,6 +12,8 @@ class IllnessCubit extends BaseCubit<IllnessState, List<Illness>> {
 
 
   Future<void> getAllIllnesses(String apiKey, String userDataId) async {
+    data.clear();
+
     emit(const IllnessLoading());
 
     if (isBusy) {

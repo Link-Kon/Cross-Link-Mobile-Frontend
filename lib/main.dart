@@ -2,11 +2,16 @@ import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:cross_link/src/adapters/bluetooth_adapter.dart';
 import 'package:cross_link/src/config/router/app_router.dart';
 import 'package:cross_link/src/config/router/routes.dart';
+import 'package:cross_link/src/config/themes/app_colors.dart';
 import 'package:cross_link/src/locator.dart';
+import 'package:cross_link/src/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'amplifyconfiguration.dart';
 import 'src/domain/repositories/illness_api_repository.dart';
@@ -23,7 +28,22 @@ Future<void> main() async {
 
   await initializeDependencies();
 
-  runApp(const MyApp());
+  if (Platform.isAndroid) {
+    WidgetsFlutterBinding.ensureInitialized();
+    [
+      Permission.location,
+      Permission.storage,
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan
+    ].request().then((status) {
+      print('status: $status');
+      runApp(const MyApp());
+    });
+
+  } else {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -34,6 +54,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  MaterialColor customColor = const MaterialColor(
+    0xFF82DE0E, <int, Color> {
+      50: Color(0xFFE9F8D9),
+      100: Color(0xFFD4F1B5),
+      200: Color(0xFFBCEA8F),
+      300: Color(0xFFA3E269),
+      400: Color(0xFF8FDC4A),
+      500: Color(0xFF82DE0E), // The default color
+      600: Color(0xFF79D90C),
+      700: Color(0xFF6ED208),
+      800: Color(0xFF63CB04),
+      900: Color(0xFF4FC200),
+    },
+  );
+
   @override
   void initState() {
     super.initState();
@@ -70,11 +106,26 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Cross Link App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: customColor,
+          splashColor: Palette.splashColor,
+          highlightColor: Palette.highlightColor,
+          scaffoldBackgroundColor: Colors.white, //default background
         ),
         initialRoute: Routes.HOME,
         routes: appRoutes(),
-        //home: BlocProvider,
+        navigatorObservers: [BluetoothAdapterStateObserver()],
+        home: StreamBuilder<BluetoothAdapterState>(
+            stream: FlutterBluePlus.adapterState,
+            initialData: BluetoothAdapterState.unknown,
+            builder: (c, snapshot) {
+              final adapterState = snapshot.data;
+              if (adapterState == BluetoothAdapterState.on) {
+                return const HomePage();
+              } else {
+                FlutterBluePlus.stopScan();
+                return BluetoothOffScreen(adapterState: adapterState);
+              }
+            }),
       ),
     );
   }

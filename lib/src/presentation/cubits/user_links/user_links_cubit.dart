@@ -12,6 +12,8 @@ class UserLinksCubit extends BaseCubit<UserLinksState, List<UserLink>> {
 
 
   Future<void> getUserLinks({required String apiKey, required String userCode}) async {
+    data.clear();
+
     emit(const UserLinksLoading());
 
     if (isBusy) return;

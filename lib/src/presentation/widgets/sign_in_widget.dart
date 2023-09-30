@@ -4,112 +4,101 @@ import 'package:cross_link/src/data/datasources/remote/user_api_service.dart';
 import 'package:cross_link/src/presentation/widgets/sign_up_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../config/themes/app_colors.dart';
+import '../../utils/common_widgets/text_form_field_label_widget.dart';
+import '../../utils/constants/nums.dart';
+import '../../utils/constants/strings.dart';
+
 class SignInWidget extends StatelessWidget {
   SignInWidget({super.key});
 
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(6),
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: 340,
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 20,),
-            const Text(
-              "Enter your credentials",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
+        height: 410,
+        child: Column(
+          children: [
+            Container(
+              height: 100,
+              decoration: const BoxDecoration(
+                color: Palette.splashColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(6)),
               ),
-              textAlign: TextAlign.center,
+              child: Center(child: Image.asset(logoImage, height: 50, width: 50)),
             ),
-            const SizedBox(height: 15,),
-            TextFormField(
-              controller: usernameController,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-              decoration: const InputDecoration(
-                hintText: 'Username',
-                hintStyle: TextStyle(
-                    color: Colors.grey, fontSize: 14),
-              ),
-            ),
-            const SizedBox(height: 15,),
-            TextFormField(
-              controller: usernameController,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-              decoration: const InputDecoration(
-                //labelStyle: TextStyle(color: Colors.red, fontSize: 16.0),
-                hintText: 'Password',
-                hintStyle: TextStyle(
-                    color: Colors.grey, fontSize: 14),
-              ),
-            ),
-            const SizedBox(height: 30,),
-            TextButton(
-              onPressed: () async {
-                print("sign in");
-                await signInUser('user1', 'Pa12345678#');
-                print('currente user');
-                AuthUser user = await getCurrentUser();
-                print('currente userID: ${user.userId}');
-                print('currente username: ${user.username}');
-                print('currente user: ${user.signInDetails}');
-
-                await printAccessToken();
-                /*Auth.currentSession().then(res=>{
-                let accessToken = res.getAccessToken()
-                let jwt = accessToken.getJwtToken()
-
-                //You can print them to see the full objects
-                console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
-                console.log(`myJwt: ${jwt}`)
-                })*/
-                //await signOutCurrentUser();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-              child: const Text("Sign in", style: TextStyle(color: Colors.white),),
-            ),
-            const SizedBox(height: 20,),
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.center,
-              children: <Widget>[
-                const Text(
-                  "Don't have an account?",
-                  style: TextStyle(
-                    fontSize: 16,
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const Text("Enter to Cross Link",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600,),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                      Navigator.pop(context);
-                      showDialog(context: context, builder: (BuildContext context) => const SignUpWidget());
+
+                  const SizedBox(height: 15,),
+                  TextFormFieldLabelWidget(controller: emailController, label: 'E-mail', validator: null,),
+                  const SizedBox(height: 15,),
+                  TextFormFieldLabelWidget(controller: passwordController, label: 'Password', validator: null,),
+                  const SizedBox(height: 15,),
+
+                  TextButton(
+                    onPressed: () async {
+                      print("sign in");
+                      await signInUser(emailController.text, passwordController.text);
+                      AuthUser user = await getCurrentUser();
+                      print('currente userID: ${user.userId}');
+                      print('currente username: ${user.username}');
+                      print('currente user: ${user.signInDetails}');
+
+                      await printAccessToken();
+                      /*Auth.currentSession().then(res=>{
+                      let accessToken = res.getAccessToken()
+                      let jwt = accessToken.getJwtToken()
+
+                      //You can print them to see the full objects
+                      console.log(`myAccessToken: ${JSON.stringify(accessToken)}`)
+                      console.log(`myJwt: ${jwt}`)
+                      })*/
+                      //await signOutCurrentUser();
                     },
-                  child: const Text("Sign up",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                      decoration: TextDecoration.underline,
+                    style: TextButton.styleFrom(
+                      minimumSize: Size(MediaQuery.of(context).size.width - 120, 40),
+                      backgroundColor: Palette.primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
                     ),
+                    child: const Text("Sign in", style: TextStyle(color: Colors.white, fontSize: textButtonSize),),
                   ),
-                ),
-              ],
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        "Don't have an account?",
+                        style: TextStyle(fontSize: 16, color: Color.fromRGBO(133,133,133,1),)
+                      ),
+                      TextButton(
+                        onPressed: () { //TODO: juntar textos
+                            Navigator.pop(context);
+                            showDialog(context: context, builder: (BuildContext context) => const SignUpWidget());
+                          },
+                        child: const Text("Sign up", style: TextStyle(color: Palette.textSelected, fontSize: 16),),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                ],
+              ),
             ),
-            const SizedBox(height: 20,),
           ],
         ),
       ),

@@ -16,9 +16,9 @@ class IllnessesPage extends StatefulWidget {
 class IllnessesPageState extends State<IllnessesPage>{
 
   //TODO: obtain data from server
-  var link1 = ['Wearable 1', '11/22/33', '1', defaultProfileImage];
-  var link2 = ['Wearable 2', '11/22/33', '0', defaultProfileImage];
-  var link3 = ['Wearable 3', '11/22/33', '0', defaultProfileImage];
+  var link1 = ['Illness 1', '11/22/33', '1', defaultProfileImage];
+  var link2 = ['Illness 2', '11/22/33', '0', defaultProfileImage];
+  var link3 = ['Illness 3', '11/22/33', '0', defaultProfileImage];
 
   var links = [];
 

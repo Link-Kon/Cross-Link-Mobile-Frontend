@@ -1,7 +1,12 @@
 import 'package:cross_link/src/config/router/routes.dart';
-import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
+
+import '../../config/themes/app_colors.dart';
+import '../../utils/common_widgets/menu_tile_widget.dart';
+import '../../utils/common_widgets/section_text_widget.dart';
+import '../../utils/common_widgets/section_title_text_widget.dart';
+import '../../utils/constants/nums.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,119 +16,60 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Palette.black,
+        elevation: 0,
       ),
-      body: Container(
-        padding: const EdgeInsets.all(defaultSize),
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: [
-                SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: const Image(image: AssetImage(defaultProfileImage)),
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.blue.withOpacity(0.1),
-                    ),
-                    child: const Icon(Icons.brush, size: 18, color: Colors.black,),
-                  ),
-                )
-              ],
+      body: Column(
+        children: <Widget>[
+          SizedBox(
+            width: 120,
+            height: 120,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: const Image(image: AssetImage(defaultProfileImage)),
             ),
-            const SizedBox(height: 10,),
-            const Text('Profile Name', style: TextStyle(fontSize: 20),),
-            const Text('useremail@mail.com', style: TextStyle(fontSize: 16),),
-            const SizedBox(height: 20,),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {Navigator.pushNamed(context, Routes.UPDATE_PROFILE);},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, side: BorderSide.none, shape: const StadiumBorder()
+          ),
+          const SizedBox(height: 10,),
+          const SectionTitleTextWidget(text: 'Maria Bustamante Zuloaga', size: 22),
+          const SizedBox(height: 5),
+          const SectionTextWidget(text: 'usermail@mail.com'),
+          const SizedBox(height: 15,),
+          SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              onPressed: () {Navigator.pushNamed(context, Routes.UPDATE_PROFILE);},
+              style: ElevatedButton.styleFrom(
+                side: BorderSide.none,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                child: const Text('Edit Profile', style: TextStyle(color: Colors.white),),
               ),
+              child: const Text('Edit Profile', style: TextStyle(color: Colors.white, fontSize: textButtonSize),),
             ),
-            const SizedBox(height: 30,),
-            const Divider(),
-            const SizedBox(height: 10,),
+          ),
+          const SizedBox(height: 30,),
 
-            //Menu
-            ProfileMenuWidget(title: 'Settings', icon: Icons.settings,
-              onPress: () {},
-            ),
-            ProfileMenuWidget(title: 'Healthcare Survey', icon: Icons.sticky_note_2_rounded,
-              onPress: () {Navigator.pushNamed(context, Routes.ILLNESSES);},
-            ),
-            ProfileMenuWidget(title: 'Check your links', icon: Icons.people_alt_rounded,
-              onPress: () {Navigator.pushNamed(context, Routes.USER_LINKS);},
-            ),
-            const Divider(),
-            const SizedBox(height: 10,),
-            ProfileMenuWidget(
-              title: 'Log out',
-              icon: Icons.exit_to_app_rounded,
-              textColor: Colors.red,
-              onPress: () {},
-            ),
-          ],
-        ),
+          //Menu
+          MenuTileWidget(title: 'Settings', icon: Icons.settings, endIcon: false,
+            onPress: () {},
+          ),
+          MenuTileWidget(title: 'Healthcare Survey', icon: Icons.copy, endIcon: false,
+            onPress: () {Navigator.pushNamed(context, Routes.ILLNESSES);},
+          ),
+          MenuTileWidget(title: 'Check your links', icon: Icons.link, endIcon: false,
+            onPress: () {Navigator.pushNamed(context, Routes.USER_LINKS);},
+          ),
+          MenuTileWidget(
+            title: 'Log out',
+            icon: Icons.exit_to_app_rounded,
+            endIcon: false,
+            onPress: () {},
+          ),
+        ],
       ),
     );
   }
 
-}
-
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.onPress,
-    this.endIcon = true,
-    this.textColor,
-  });
-
-  final String title;
-  final IconData icon;
-  final VoidCallback onPress;
-  final bool endIcon;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onPress,
-      leading: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Colors.blue.withOpacity(0.1),
-        ),
-        child: Icon(icon, color: Colors.blue,),
-      ),
-      title: Text(title, style: const TextStyle(fontSize: 16).apply(color: textColor),),
-      trailing: endIcon? Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Colors.grey.withOpacity(0.1),
-        ),
-        child: const Icon(Icons.arrow_forward, size: 18, color: Colors.grey,),
-      ) : null,
-    );
-  }
 }
