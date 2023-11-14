@@ -4,14 +4,32 @@ import 'base_response.dart';
 
 class UserResponse extends Equatable {
   final String token;
-  final BaseResponse response;
+  final String userCode;
+  final String id;
+  final String name;
+  final String lastname;
+  final String email;
+  //final BaseResponse? response;
 
-  const UserResponse({required this.token, required this.response});
+  const UserResponse({
+    required this.token,
+    required this.userCode,
+    required this.id,
+    required this.name,
+    required this.lastname,
+    required this.email,
+    //required this.response
+  });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
     return UserResponse(
-      token: json['token'] as String,
-      response: BaseResponse.fromJson(json['itemResource'] as Map<String, dynamic>),
+      token: json['token'] ?? '',
+      userCode: json['userCode'] ?? '',
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      lastname: json['lastname'] ?? '',
+      email: json['email'] ?? '',
+      //response: BaseResponse.fromJson(json['itemResource'] as Map<String, dynamic>),
     );
   }
 
@@ -22,7 +40,12 @@ class UserResponse extends Equatable {
   List<Object?> get props {
     return [
       token,
-      response,
+      userCode,
+      id,
+      name,
+      lastname,
+      email,
+      //response,
     ];
   }
 

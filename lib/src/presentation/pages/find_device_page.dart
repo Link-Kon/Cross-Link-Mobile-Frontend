@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:get/get.dart';
 
 import '../../adapters/bluetooth_widgets.dart';
 import '../../config/themes/app_colors.dart';
 import 'device_page.dart';
 
-class FindDevicesPage extends StatefulWidget {
-  const FindDevicesPage({Key? key}) : super(key: key);
+class FindDevicePage extends StatefulWidget {
+  const FindDevicePage({Key? key}) : super(key: key);
 
   @override
-  State<FindDevicesPage> createState() => _FindDevicesPageState();
+  State<FindDevicePage> createState() => _FindDevicePageState();
 }
 
-class _FindDevicesPageState extends State<FindDevicesPage> {
+class _FindDevicePageState extends State<FindDevicePage> {
   final Map<DeviceIdentifier, ValueNotifier<bool>> isConnectingOrDisconnecting = {};
 
   @override
@@ -21,7 +20,7 @@ class _FindDevicesPageState extends State<FindDevicesPage> {
     return ScaffoldMessenger(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Find Devices'),
+          title: const Text('Find Devices Old'),
           centerTitle: true,
           backgroundColor: Colors.white,
           foregroundColor: Palette.black,

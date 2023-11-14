@@ -8,6 +8,7 @@ class TextFormFieldLabelWidget extends StatelessWidget {
     required this.label,
     required this.validator,
     this.enable = true,
+    this.hideText = false,
     this.textLength = 100,
   });
 
@@ -15,12 +16,14 @@ class TextFormFieldLabelWidget extends StatelessWidget {
   final String label;
   final String? Function(String?)? validator;
   final bool enable;
+  final bool hideText;
   final int textLength;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      obscureText: hideText,
       decoration: InputDecoration(
         enabled: enable,
         label: Text(label),

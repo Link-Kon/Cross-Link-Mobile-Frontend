@@ -1,17 +1,20 @@
-import 'package:cross_link/src/config/router/routes.dart';
-import 'package:cross_link/src/presentation/pages/device_links_page.dart';
-import 'package:cross_link/src/presentation/pages/device_settings_page.dart';
-import 'package:cross_link/src/presentation/pages/find_device_page.dart';
-import 'package:cross_link/src/presentation/pages/healthcare_survey_page.dart';
-import 'package:cross_link/src/presentation/pages/home_page.dart';
-import 'package:cross_link/src/presentation/pages/illnesses_page.dart';
-import 'package:cross_link/src/presentation/pages/profile_page.dart';
-import 'package:cross_link/src/presentation/pages/settings_page.dart';
-import 'package:cross_link/src/presentation/pages/summary_page.dart';
-import 'package:cross_link/src/presentation/pages/sign_up_page.dart';
-import 'package:cross_link/src/presentation/pages/update_profile_screen.dart';
-import 'package:cross_link/src/presentation/pages/user_links_page.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../presentation/pages/device_links_page.dart';
+import '../../presentation/pages/device_settings_page.dart';
+import '../../presentation/pages/find_device_page.dart';
+import '../../presentation/pages/find_devices_page.dart';
+import '../../presentation/pages/find_devices_serial_page.dart';
+import '../../presentation/pages/healthcare_survey_page.dart';
+import '../../presentation/pages/home_page.dart';
+import '../../presentation/pages/illnesses_page.dart';
+import '../../presentation/pages/profile_page.dart';
+import '../../presentation/pages/settings_page.dart';
+import '../../presentation/pages/sign_up_page.dart';
+import '../../presentation/pages/summary_page.dart';
+import '../../presentation/pages/update_profile_screen.dart';
+import '../../presentation/pages/user_links_page.dart';
+import 'routes.dart';
 
 Map<String, Widget Function(BuildContext)> appRoutes() {
   return {
@@ -26,6 +29,8 @@ Map<String, Widget Function(BuildContext)> appRoutes() {
     Routes.SUMMARY: (_) => const SummaryPage(),
     Routes.SIGN_UP: (_) => const SignUpPage(),
     Routes.ILLNESSES: (_) => const IllnessesPage(),
-    Routes.FIND_DEVICE: (_) => const FindDevicesPage(),
+    Routes.FIND_DEVICE: (_) => const FindDevicePage(),
+    Routes.FIND_DEVICES: (_) => const FindDevicesPage(),
+    Routes.FIND_DEVICES_SERIAL: (_) => const FindDevicesSerialPage(),
   };
 }

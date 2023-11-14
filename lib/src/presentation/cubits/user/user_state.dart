@@ -24,6 +24,10 @@ class UserSuccess extends UserState {
   const UserSuccess({super.response});
 }
 
+class UserGetSuccess extends UserState {
+  const UserGetSuccess({super.response});
+}
+
 class UserFailed extends UserState {
   const UserFailed({super.error});
 }

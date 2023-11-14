@@ -1,11 +1,11 @@
 import '../../../domain/models/requests/user_links_request.dart';
-import '../../../domain/models/user_link.dart';
+import '../../../domain/models/responses/user_link_response.dart';
 import '../../../domain/repositories/relationship_api_repository.dart';
 import '../../../utils/resources/data_state.dart';
 import '../base/base_cubit.dart';
 import 'user_links_state.dart';
 
-class UserLinksCubit extends BaseCubit<UserLinksState, List<UserLink>> {
+class UserLinksCubit extends BaseCubit<UserLinksState, List<UserLinkResponse>> {
   final RelationshipApiRepository _apiRepository;
 
   UserLinksCubit (this._apiRepository) : super(const UserLinksLoading(), []);
@@ -35,7 +35,6 @@ class UserLinksCubit extends BaseCubit<UserLinksState, List<UserLink>> {
   }
 
   Future<void> addUserLink({required String apiKey, required String userCode, required String user2Code}) async {
-
     emit(const UserLinksLoading());
 
     if (isBusy) return;
@@ -46,9 +45,8 @@ class UserLinksCubit extends BaseCubit<UserLinksState, List<UserLink>> {
       );
 
       if (response is DataSuccess) {
-        final userLinks = response.data!;
-        //data.addAll(userLinks);
-        emit(UserLinksSuccess(userLinks: data));
+        final responseData = response.data!;
+        emit(UserLinkAddSuccess(response: responseData));
 
       } else if (response is DataFailed) {
         emit(UserLinksFailed(error: response.error));

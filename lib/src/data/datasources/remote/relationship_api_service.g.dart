@@ -13,7 +13,8 @@ class _RelationshipApiService implements RelationshipApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://10.0.2.2:7121/api';
+    baseUrl ??=
+        'http://link-backend-ef2-dev.eba-gnkgpdgz.us-east-2.elasticbeanstalk.com/api';
   }
 
   final Dio _dio;
@@ -21,17 +22,15 @@ class _RelationshipApiService implements RelationshipApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<List<UserLink>>> getUserLinks({
-    String? userCode,
-    String? apiKey,
-  }) async {
+  Future<HttpResponse<List<UserLinkResponse>>> getUserLinks(
+      {String? userCode}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'apiKey': apiKey};
+    final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<HttpResponse<List<UserLink>>>(Options(
+        _setStreamType<HttpResponse<List<UserLinkResponse>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -44,22 +43,21 @@ class _RelationshipApiService implements RelationshipApiService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => UserLink.fromJson(i as Map<String, dynamic>))
+        .map(
+            (dynamic i) => UserLinkResponse.fromJson(i as Map<String, dynamic>))
         .toList();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
 
   @override
-  Future<HttpResponse<BaseResponse>> addUserLink({
-    UserLink? userLink,
-    String? apiKey,
-  }) async {
+  Future<HttpResponse<BaseResponse>> addUserLink({UserLink? userLink}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'apiKey': apiKey};
+    final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = userLink;
+    final _data = <String, dynamic>{};
+    _data.addAll(userLink?.toJson() ?? <String, dynamic>{});
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<BaseResponse>>(Options(
       method: 'POST',

@@ -1,5 +1,6 @@
 import '../../domain/models/requests/user_links_request.dart';
 import '../../domain/models/responses/base_response.dart';
+import '../../domain/models/responses/user_link_response.dart';
 import '../../domain/models/user_link.dart';
 import '../../domain/repositories/relationship_api_repository.dart';
 import '../../utils/resources/data_state.dart';
@@ -12,10 +13,10 @@ class RelationshipApiRepositoryImpl extends BaseApiRepository implements Relatio
   RelationshipApiRepositoryImpl(this._relationshipApiService);
 
   @override
-  Future<DataState<List<UserLink>>> getUserLinks({required UserLinksRequest request}) {
-    return getStateOf<List<UserLink>>(
+  Future<DataState<List<UserLinkResponse>>> getUserLinks({required UserLinksRequest request}) {
+    return getStateOf<List<UserLinkResponse>>(
       request: () => _relationshipApiService.getUserLinks(
-        apiKey: request.apiKey,
+        //apiKey: request.apiKey,
         userCode: request.user1Code,
       )
     );
@@ -25,8 +26,12 @@ class RelationshipApiRepositoryImpl extends BaseApiRepository implements Relatio
   Future<DataState<BaseResponse>> addUserLink({required UserLinksRequest request}) {
     return getStateOf<BaseResponse>(
         request: () => _relationshipApiService.addUserLink(
-          apiKey: request.apiKey,
-          userLink: UserLink(user2code: request.user2Code),
+          //apiKey: request.apiKey,
+          userLink: UserLink(
+            user1code: request.user1Code,
+            user2code: request.user2Code,
+            state: request.state
+          ),
         )
     );
   }

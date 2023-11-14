@@ -1,15 +1,18 @@
 import 'package:cross_link/src/presentation/cubits/user_links/user_links_cubit.dart';
 import 'package:cross_link/src/presentation/cubits/user_links/user_links_state.dart';
-import 'package:cross_link/src/presentation/widgets/add_user_widget.dart';
-import 'package:cross_link/src/utils/constants/nums.dart';
-import 'package:cross_link/src/utils/constants/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../config/themes/app_colors.dart';
-import '../../domain/models/user_link.dart';
+import '../../domain/models/responses/user_link_response.dart';
 import '../../utils/common_widgets/section_bold_text_widget.dart';
+import '../../utils/constants/nums.dart';
+import '../../utils/constants/strings.dart';
+import '../cubits/user/user_cubit.dart';
+import '../cubits/user_data/user_data_cubit.dart';
+import '../widgets/add_user_widget.dart';
 
 class UserLinksPage extends StatefulWidget {
   const UserLinksPage({super.key});
@@ -19,12 +22,15 @@ class UserLinksPage extends StatefulWidget {
 
 class _UserLinksPageState extends State<UserLinksPage>{
 
+  String userCode1 = '';
   @override
   void initState() {
     super.initState();
     final aCubit = BlocProvider.of<UserLinksCubit>(context);
-    aCubit.getUserLinks(apiKey: '', userCode: 'user1code');
+    final bCubit = BlocProvider.of<UserCubit>(context);
 
+    userCode1 = bCubit.state.response!.userCode;
+    aCubit.getUserLinks(apiKey: '', userCode: userCode1);
   }
 
   @override
@@ -44,7 +50,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(context: context, builder: (BuildContext context) => AddUserWidget());
+          showDialog(context: context, builder: (BuildContext context) => AddUserWidget(userCode1: userCode1));
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -74,7 +80,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
     );
   }
 
-  Widget _buildUserLinks(List<UserLink> links) {
+  Widget _buildUserLinks(List<UserLinkResponse> links) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(defaultSize-20),
@@ -92,7 +98,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
     );
   }
 
-  Widget userListWidget(List<UserLink> links) {
+  Widget userListWidget(List<UserLinkResponse> links) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
@@ -101,7 +107,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
     );
   }
 
-  List<Widget> buildUserList(List<UserLink> links) {
+  List<Widget> buildUserList(List<UserLinkResponse> links) {
     List<Widget> list = [];
     for (var element in links) {
       list.add(userInfo(element));
@@ -110,7 +116,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
     return list;
   }
 
-  Widget userInfo(UserLink link) {
+  Widget userInfo(UserLinkResponse link) {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -119,7 +125,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(6.0),
-        onTap: () {debugPrint('Card: ${link.user2code}');},
+        onTap: () {debugPrint('Card: ${link.code}');},
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: SizedBox(
@@ -130,15 +136,14 @@ class _UserLinksPageState extends State<UserLinksPage>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      SectionBoldTextWidget(text: '${link.name?? 'Name'}: ${link.user2code}'),
+                      SectionBoldTextWidget(text: link.name ?? 'User\'s Name'),
                       const SizedBox(height: 10),
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           text: 'Link date: ',
-                          style: TextStyle(color: Color.fromRGBO(143,143,143,1), fontSize: 14.0, fontWeight: FontWeight.w600),
+                          style: const TextStyle(color: Color.fromRGBO(143,143,143,1), fontSize: 14.0, fontWeight: FontWeight.w600),
                           children: <TextSpan>[
-                            TextSpan(text: '2023/09/23', style: TextStyle(fontWeight: FontWeight.normal)),
-                            //TextSpan(text: link.state.toString(), style: const TextStyle(fontWeight: FontWeight.normal)),
+                            TextSpan(text: link.creationDate.toString().substring(0, 10), style: const TextStyle(fontWeight: FontWeight.normal)),
                           ],
                         ),
                       ),
@@ -151,7 +156,7 @@ class _UserLinksPageState extends State<UserLinksPage>{
                   width: 50,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(link.imageUrl ?? defaultProfileImage)
+                    child: SvgPicture.asset(link.imageUrl ?? defaultProfileImage)
                   ),
                 )
               ],

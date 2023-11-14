@@ -1,9 +1,13 @@
 import 'package:cross_link/src/config/router/routes.dart';
 import 'package:cross_link/src/utils/constants/nums.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../config/themes/app_colors.dart';
 import '../../utils/common_widgets/text_form_field_label_widget.dart';
+import '../cubits/user/user_cubit.dart';
+import '../cubits/user_data/user_data_cubit.dart';
+import '../cubits/user_patient/user_patient_cubit.dart';
 
 class HealthcareSurveyPage extends StatelessWidget {
   HealthcareSurveyPage({super.key});
@@ -15,6 +19,9 @@ class HealthcareSurveyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final aCubit = BlocProvider.of<UserPatientCubit>(context);
+    final bCubit = BlocProvider.of<UserDataCubit>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Healthcare Survey Page"),
@@ -58,10 +65,18 @@ class HealthcareSurveyPage extends StatelessWidget {
                       height: 55,
                       child: ElevatedButton(
                           onPressed: () {
+                            aCubit.addUserPatient(
+                              state: true,
+                              weight: double.parse(weightController.text),
+                              height: double.parse(heightController.text),
+                              country: 'Peru',
+                              userDataId: bCubit.state.response!.id!,
+                            );
+
                             Navigator.pop(context);
-                            Navigator.pushReplacementNamed(context, Routes.HOME);
+                            //Navigator.pushReplacementNamed(context, Routes.HOME);
                           },
-                          child: const Text("Sign Up",
+                          child: const Text("Save information",
                             style: TextStyle(color: Colors.white, fontSize: textButtonSize)
                           )
                       ),

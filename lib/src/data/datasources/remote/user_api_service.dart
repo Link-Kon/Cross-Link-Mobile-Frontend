@@ -16,4 +16,14 @@ abstract class UserApiService {
     @Body() required User user,
   });
 
+  @GET('/User/GetByUsername/{username}')
+  Future<HttpResponse<UserResponse>> getUser({
+    @Path("username") required String username,
+  });
+
+  @PUT('/User/VerifyToken')
+  Future<HttpResponse<UserResponse>> updateUser({
+    @Body() required User user,
+  });
+
 }

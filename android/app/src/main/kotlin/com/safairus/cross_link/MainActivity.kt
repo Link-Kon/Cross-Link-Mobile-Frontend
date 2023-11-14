@@ -1,4 +1,4 @@
-package com.example.cross_link
+package com.safairus.cross_link
 
 import io.flutter.embedding.android.FlutterActivity
 

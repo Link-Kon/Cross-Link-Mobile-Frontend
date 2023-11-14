@@ -6,4 +6,13 @@ abstract class UserApiRepository {
   Future<DataState<UserResponse>> addUser({
     required UserRequest request,
   });
+
+  Future<DataState<UserResponse>> getUser({
+    required String username
+  });
+
+  Future<DataState<UserResponse>> updateUser({
+    required UserRequest request,
+  });
+
 }

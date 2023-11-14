@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cross_link/src/config/router/routes.dart';
 import 'package:cross_link/src/presentation/widgets/navigation_drawer_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -12,14 +15,19 @@ import '../../utils/constants/nums.dart';
 import '../../utils/constants/strings.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.token});
+  final String? token;
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>{
-
+  StreamSubscription<User?>? _authSubscription;
+  User? userLogged;
+  bool existUser = false;
   List<_ChartData>? chartData;
+  late String? token;
 
   @override
   void initState() {
@@ -34,7 +42,31 @@ class _HomePageState extends State<HomePage>{
       _ChartData(2011, 70, 184)
     ];
 
+    _authSubscription = FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (mounted) {
+        if (user != null) {
+          existUser = true;
+          userLogged = user;
+
+        } else {
+          userLogged = null;
+          existUser = false;
+        }
+
+        setState(() {});
+      }
+    });
+
+    token = widget.token;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -69,7 +101,7 @@ class _HomePageState extends State<HomePage>{
           Expanded(
             child: ListView(
               children: <Widget>[
-                const SectionTitleTextWidget(text: 'Hello, Maria!'),
+                SectionTitleTextWidget(text: 'Hello, ${existUser? userLogged!.displayName : 'User'}!'),
                 const SizedBox(height: 5),
                 const SectionTextWidget(text: 'Descriptive text'),
                 const SizedBox(height: 30),

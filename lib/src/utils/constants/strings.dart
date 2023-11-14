@@ -2,10 +2,10 @@
 const String appTittle = 'Cross Link';
 
 // Images
-const logoNameImage = 'assets/crosslinklogo.png';
-const logoImage = 'assets/crosslinkNlogo.png';
-const defaultProfileImage = 'assets/crosslinkNlogo.png';
-const defaultWearableImage = 'assets/wearable.png';
+const logoNameImage = 'assets/logo/cross_link_logo.svg';
+const logoImage = 'assets/logo/cross_link_n_logo.svg';
+const defaultProfileImage = 'assets/images/profile_img.svg';
+const defaultWearableImage = 'assets/images/wearable.png';
 
 // Networking and APIs
-const String baseUrlWebService = 'https://10.0.2.2:7121/api'; //TODO: change
+const String baseUrlWebService = 'http://link-backend-ef2-dev.eba-gnkgpdgz.us-east-2.elasticbeanstalk.com/api'; //'https://10.0.2.2:7121/api'; //TODO: change

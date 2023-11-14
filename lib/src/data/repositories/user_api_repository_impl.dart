@@ -17,9 +17,31 @@ class UserApiRepositoryImpl extends BaseApiRepository implements UserApiReposito
         request: () => _userApiService.addUser(
           user: User(
             username: request.username,
-            userCode: request.userCode,
+            deviceToken: request.deviceToken,
             token: request.token
           )
+        )
+    );
+  }
+
+  @override
+  Future<DataState<UserResponse>> getUser({required String username}) {
+    return getStateOf<UserResponse>(
+        request: () => _userApiService.getUser(
+            username: username
+        )
+    );
+  }
+
+  @override
+  Future<DataState<UserResponse>> updateUser({required UserRequest request}) {
+    return getStateOf<UserResponse>(
+        request: () => _userApiService.updateUser(
+            user: User(
+                username: request.username,
+                deviceToken: request.deviceToken,
+                token: request.token
+            )
         )
     );
   }

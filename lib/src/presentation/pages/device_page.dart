@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -371,7 +372,9 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
       initialData: widget.characteristic.lastValue,
       builder: (context, snapshot) {
         final List<int>? value = snapshot.data;
-        print('values: $value');
+        const asciiDecoder = AsciiDecoder();
+
+        print('values: ${asciiDecoder.convert(value!)}');
         return ExpansionTile(
           title: ListTile(
             title: Column(

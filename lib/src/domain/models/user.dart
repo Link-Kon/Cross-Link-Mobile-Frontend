@@ -1,25 +1,29 @@
 class User {
+  final String? id;
   final String? username;
-  final String? userCode;
+  final String? code;
   final String? token;
+  final String? deviceToken;
 
-  const User({this.username, this.userCode, this.token});
+  const User({this.id,this.username, this.code, this.token, this.deviceToken});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id: json['id'] as String?,
       username: json['username'] as String?,
-      userCode: json['userCode'] as String?,
+      code: json['userCode'] as String?,
       token: json['token'] as String?,
+      deviceToken: json['deviceToken'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
+      'id': id,
       'username': username,
-      'code': userCode,
+      'userCode': code,
       'token': token,
-      'creationDate': "2023-08-16T06:12:56.104Z",
-      'lastUpdateDate': "2023-08-16T06:12:56.104Z"
+      'deviceToken': deviceToken,
     };
   }
 

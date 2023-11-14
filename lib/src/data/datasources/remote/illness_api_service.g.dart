@@ -13,7 +13,8 @@ class _IllnessApiService implements IllnessApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://10.0.2.2:7121/api';
+    baseUrl ??=
+        'http://link-backend-ef2-dev.eba-gnkgpdgz.us-east-2.elasticbeanstalk.com/api';
   }
 
   final Dio _dio;

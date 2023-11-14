@@ -1,11 +1,13 @@
 class UserRequest {
   final String username;
-  final String userCode;
+  //final String code;
   final String token;
+  final String deviceToken;
 
   UserRequest({
     required this.username,
-    required this.userCode,
+    //required this.code,
     required this.token,
+    required this.deviceToken,
   });
 }

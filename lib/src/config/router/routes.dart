@@ -23,4 +23,8 @@ abstract class Routes {
   static const SIGN_UP = '/sign_up';
   // ignore: constant_identifier_names
   static const FIND_DEVICE = '/find_device';
+  // ignore: constant_identifier_names
+  static const FIND_DEVICES = '/find_devices';
+  // ignore: constant_identifier_names
+  static const FIND_DEVICES_SERIAL = '/find_devices?serial';
 }
