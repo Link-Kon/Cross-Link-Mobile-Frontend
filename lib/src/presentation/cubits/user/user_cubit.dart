@@ -57,4 +57,25 @@ class UserCubit extends BaseCubit<UserState, List<User>> {
     });
   }
 
+  Future<void> updateDeviceToken({required String userCode, required String deviceToken}) async {
+    emit(const UserLoading());
+    if (isBusy) return;
+
+    await run(() async {
+      final response = await _apiRepository.updateDeviceToken(
+        request: UserRequest(username: '', token: '', userCode: userCode, deviceToken: deviceToken),
+      );
+
+      if (response is DataSuccess) {
+        debugPrint('updateDeviceToken success');
+        final userResponse = response.data!;
+        emit(UserDeviceTokenSuccess(baseResponse: userResponse));
+
+      } else if (response is DataFailed) {
+        debugPrint('updateDeviceToken failed: ${response.error!.response}');
+        emit(UserFailed(error: response.error));
+      }
+    });
+  }
+
 }

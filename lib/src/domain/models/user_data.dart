@@ -5,6 +5,7 @@ class UserData {
   final String? name;
   final String? lastname;
   final String? photo;
+  final String? userCode;
   final int? userId;
 
   const UserData({
@@ -14,6 +15,7 @@ class UserData {
     this.name,
     this.lastname,
     this.photo,
+    this.userCode,
     this.userId
   });
 
@@ -37,6 +39,7 @@ class UserData {
       'lastname': lastname,
       'userPhoto': photo,
       'userId': userId,
+      'userCode': userCode,
     };
   }
 

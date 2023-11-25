@@ -21,6 +21,7 @@ class UserDataApiRepositoryImpl extends BaseApiRepository implements UserDataApi
               name: request.name,
               lastname: request.lastname,
               photo: request.photo,
+              userCode: request.code,
             )
         )
     );

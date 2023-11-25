@@ -33,6 +33,7 @@ class SignInWidget extends StatelessWidget {
     final aCubit = BlocProvider.of<UserCubit>(context);
     final udCubit = BlocProvider.of<UserDataCubit>(context);
     bool createUserData = false;
+    bool deviceTokenData = false;
 
     return MultiBlocListener(
       listeners: [
@@ -82,9 +83,24 @@ class SignInWidget extends StatelessWidget {
               case UserGetSuccess:
                 debugPrint('user found');
                 createUserData = false;
-                udCubit.getUserData(userCode: state.response!.userCode);
 
-                Navigator.pop(context);
+                if (!deviceTokenData) {
+                  String userCode = state.response!.userCode;
+                  aCubit.updateDeviceToken(userCode: userCode, deviceToken: deviceToken);
+
+                } else {
+                  udCubit.getUserData(userCode: state.response!.userCode);
+
+                  Navigator.pop(context);
+                }
+
+                break;
+
+              case UserDeviceTokenSuccess:
+                debugPrint('Device token updated');
+                deviceTokenData = true;
+                aCubit.getUser(username: user!.displayName!);
+
                 break;
             }
           },

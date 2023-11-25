@@ -1,4 +1,5 @@
 import '../../domain/models/requests/user_request.dart';
+import '../../domain/models/responses/base_response.dart';
 import '../../domain/models/responses/user_response.dart';
 import '../../domain/models/user.dart';
 import '../../domain/repositories/user_api_repository.dart';
@@ -29,6 +30,19 @@ class UserApiRepositoryImpl extends BaseApiRepository implements UserApiReposito
     return getStateOf<UserResponse>(
         request: () => _userApiService.getUser(
             username: username
+        )
+    );
+  }
+
+  @override
+  Future<DataState<BaseResponse>> updateDeviceToken({ required UserRequest request}) {
+    print('userCode: ${request.userCode}');
+    return getStateOf<BaseResponse>(
+        request: () => _userApiService.updateDeviceToken(
+            userCode: request.userCode,
+            user: User(
+                deviceToken: request.deviceToken,
+            )
         )
     );
   }

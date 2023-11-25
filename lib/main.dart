@@ -14,9 +14,9 @@ import 'src/config/router/app_router.dart';
 import 'src/config/router/routes.dart';
 import 'src/config/themes/app_colors.dart';
 import 'src/domain/models/gyro_info.dart';
-//import 'src/domain/models/gyro_info_list.dart';
+import 'src/domain/models/gyro_info_list.dart'; //For test
 import 'src/domain/models/heart_info.dart';
-//import 'src/domain/models/heart_info_list.dart';
+import 'src/domain/models/heart_info_list.dart'; //For test
 import 'src/domain/repositories/gyro_info_api_repository.dart';
 import 'src/domain/repositories/heart_info_api_repository.dart';
 import 'src/domain/repositories/illness_api_repository.dart';
@@ -226,8 +226,12 @@ void scheduleBodyInfoRequest(WearableCubit wearableCubit, GyroInfoCubit gyroInfo
             subscription = bluetoothCharacteristic!.onValueReceived.listen((value) {
               //print(i+1);
               //i = i+1;
-              gyroList.add(recollectGyroInfo(value));
-              heartList.add(recollectHeartInfo(value));
+              const asciiDecoder = AsciiDecoder();
+              var info = asciiDecoder.convert(value).split('|');
+              var length = info.length;
+              //print('lentgh: $length');
+              if (activateGyroInfo && length > 3) gyroList.add(recollectGyroInfo(value));
+              if (activateHeartInfo) heartList.add(recollectHeartInfo(value));
             });
 
             //print(gyroList.length);
@@ -237,11 +241,11 @@ void scheduleBodyInfoRequest(WearableCubit wearableCubit, GyroInfoCubit gyroInfo
             String code = userCubit.state.response!.userCode;
             String username = userCubit.state.response!.name;
 
-            //var g = GyroInfoList(username: 'username', userCode: 'code', list: gyroList);
-            //var h = HeartInfoList(username: 'username', userCode: 'code', list: heartList);
+            /*var g = GyroInfoList(username: 'username', userCode: 'code', list: gyroList);
+            var h = HeartInfoList(username: 'username', userCode: 'code', list: heartList);
 
-            //if (activateGyroInfo) print(g.toJson());
-            //if (activateHeartInfo) print(h.toJson());
+            if (activateGyroInfo) print(g.toJson());
+            if (activateHeartInfo) print(h.toJson());*/
 
             if (activateGyroInfo) gyroInfoCubit.addGyroInfo(userCode: code, username: username, list: gyroList);
             if (activateHeartInfo) heartInfoCubit.addHeartInfo(userCode: code, username: username, list: heartList);
@@ -273,7 +277,7 @@ BluetoothCharacteristic? receivedBodyData(List<BluetoothService> services) {
 GyroInfo recollectGyroInfo(List<int> information) {
   const asciiDecoder = AsciiDecoder();
   var info = asciiDecoder.convert(information).split('|');
-  //debugPrint('result ${asciiDecoder.convert(information)}');
+  debugPrint('result ${asciiDecoder.convert(information)}');
 
   return GyroInfo(
     accelX: double.parse(info[3].split(':')[1]),
@@ -291,7 +295,7 @@ HeartInfo recollectHeartInfo(List<int> information) {
   //debugPrint('result ${asciiDecoder.convert(information)}');
 
   return HeartInfo(
-    red: double.parse(info[1].split(':')[1]),
+    red: double.parse(info[1].split(':')[1].replaceAll(',', '')),
     infraRed: double.parse(info[2].split(':')[1]),
   );
 }

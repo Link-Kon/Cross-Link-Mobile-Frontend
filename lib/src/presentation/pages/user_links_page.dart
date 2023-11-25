@@ -7,11 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../config/themes/app_colors.dart';
 import '../../domain/models/responses/user_link_response.dart';
+import '../../domain/repositories/user_api_repository.dart';
+import '../../locator.dart';
 import '../../utils/common_widgets/section_bold_text_widget.dart';
 import '../../utils/constants/nums.dart';
 import '../../utils/constants/strings.dart';
 import '../cubits/user/user_cubit.dart';
-import '../cubits/user_data/user_data_cubit.dart';
 import '../widgets/add_user_widget.dart';
 
 class UserLinksPage extends StatefulWidget {
@@ -50,7 +51,16 @@ class _UserLinksPageState extends State<UserLinksPage>{
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(context: context, builder: (BuildContext context) => AddUserWidget(userCode1: userCode1));
+          showDialog(context: context, builder: (BuildContext context) {
+            final aCubit = UserCubit(
+              locator<UserApiRepository>(),
+            );
+
+            return BlocProvider.value(
+              value: aCubit,
+              child: AddUserWidget(userCode1: userCode1),
+            );
+          });
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

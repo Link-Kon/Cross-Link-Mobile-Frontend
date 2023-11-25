@@ -18,9 +18,10 @@ class AddUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final aCubit = UserCubit(
+    /*final aCubit = UserCubit(
       locator<UserApiRepository>(),
-    );
+    );*/
+    final aCubit = BlocProvider.of<UserCubit>(context);
     final bCubit = BlocProvider.of<UserLinksCubit>(context);
 
     return MultiBlocListener(
@@ -86,7 +87,21 @@ class AddUserWidget extends StatelessWidget {
               const SizedBox(height: 15,),
               TextFormFieldLabelWidget(controller: emailController, label: 'Username', validator: emailValidator,),
               const SizedBox(height: 10,),
-              TextButton(
+              ElevatedButton(
+                onPressed: () {
+                  debugPrint("get user 2");
+                  aCubit.getUser(username: emailController.text);
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: Size(MediaQuery.of(context).size.width - 120, 40),
+                  backgroundColor: Palette.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                ),
+                child: const Text("Add", style: TextStyle(color: Colors.white),),
+              ),
+              /*TextButton(
                 onPressed: () {
                   debugPrint("get user 2");
                   aCubit.getUser(username: emailController.text);
@@ -100,7 +115,7 @@ class AddUserWidget extends StatelessWidget {
                   ),
                 ),
                 child: const Text("Add", style: TextStyle(color: Colors.white),),
-              ),
+              ),*/
             ],
           ),
         ),

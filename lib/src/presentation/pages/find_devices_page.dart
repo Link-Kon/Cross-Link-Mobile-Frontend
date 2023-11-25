@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,13 @@ class _FindDevicesPageState extends State<FindDevicesPage> {
 
   bool searchDevices = false;
   String deviceConnectedId = '';
+  late Timer _timer;
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +80,11 @@ class _FindDevicesPageState extends State<FindDevicesPage> {
 
                             if (searchDevices) {
                               try {
-                                await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15), androidUsesFineLocation: false);
+                                await FlutterBluePlus.startScan(timeout: const Duration(seconds: 10), androidUsesFineLocation: false);
+                                _timer = Timer(const Duration(seconds: 10), () {
+                                  searchDevices = false;
+                                  if (mounted) setState(() {});
+                                });
                               } catch (e) {
                                 debugPrint("Start Scan Error: e");
                               }
@@ -144,7 +157,10 @@ class _FindDevicesPageState extends State<FindDevicesPage> {
                                           isConnectingOrDisconnecting[d.remoteId] ??= ValueNotifier(true);
                                           isConnectingOrDisconnecting[d.remoteId]!.value = true;
                                           try {
-                                            await d.disconnect().then((value) => Navigator.pop(context));
+                                            await d.disconnect().then((value) {
+                                              setState(() {});
+                                              Navigator.pop(context);
+                                            });
                                             aCubit.setDevice(device: null);
                                             debugPrint("Disconnect: Success");
                                           } catch (e) {
@@ -215,7 +231,7 @@ class _FindDevicesPageState extends State<FindDevicesPage> {
                                           isConnectingOrDisconnecting[r.device.remoteId] ??= ValueNotifier(false);
                                           isConnectingOrDisconnecting[r.device.remoteId]!.value = false;
 
-                                          //Obtener servicios y avtivar notificaciones
+                                          //Obtener servicios y activar notificaciones
                                           await r.device.discoverServices(timeout: 5).then((v) async {
                                             List<BluetoothService> services = v;
                                             await r.device.requestMtu(223);
